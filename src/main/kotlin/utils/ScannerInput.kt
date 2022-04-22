@@ -35,6 +35,18 @@ object ScannerInput {
         } while (true)
     }
 
+    @JvmStatic
+    fun readNextFloat(prompt: String?): Float {
+        do {
+            try {
+                print(prompt)
+                return Scanner(System.`in`).next().toFloat()
+            } catch (e: NumberFormatException) {
+                System.err.println("\tEnter a float number please.")
+            }
+        } while (true)
+    }
+
     /**
      * Read a double from the user.  If the entered data isn't actually a double,
      * the user is prompted again to enter the double.
