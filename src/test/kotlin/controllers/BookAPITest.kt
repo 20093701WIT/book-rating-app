@@ -20,11 +20,11 @@ class BookAPITest {
 
     @BeforeEach
     fun setup(){
-        wonder = Book("Wonder", "R. J. Palacio","Ficton", 2012, 315, 9.99f, true)
-        noLongerHuman = Book("No Longer Human", "Osamu Dazai", "Fiction", 1948, 170, 7.99f, true)
-        rollOfThunder = Book("Roll Of Thunder, Hear My Cry", "Mildred D. Taylor", "Fiction", 1976, 220, 8.99f, true)
-        wimpyKid1 = Book("Diary of a Wimpy Kid", "Jeff Kinney", "Fiction", 2007, 217, 6.99f, false)
-        gatsby = Book("The Great Gatsby", "Scott F. Fitzgerald", "Fiction", 1925, 176, 6.99f, true)
+        wonder = Book("Wonder", "R. J. Palacio","Ficton", 2012, 315, 9.99, true)
+        noLongerHuman = Book("No Longer Human", "Osamu Dazai", "Fiction", 1948, 170, 7.99, true)
+        rollOfThunder = Book("Roll Of Thunder, Hear My Cry", "Mildred D. Taylor", "Fiction", 1976, 220, 8.99, true)
+        wimpyKid1 = Book("Diary of a Wimpy Kid", "Jeff Kinney", "Fiction", 2007, 217, 6.99, false)
+        gatsby = Book("The Great Gatsby", "Scott F. Fitzgerald", "Fiction", 1925, 176, 6.99, true)
 
         //adding 5 Book to the books api
         populatedBooks!!.add(wonder!!)
@@ -49,7 +49,7 @@ class BookAPITest {
     inner class AddBooks {
         @Test
         fun `adding a Book to a populated list adds to ArrayList`() {
-            val newBook = Book("test", "author", "science", 2002, 173, 4.99f, false)
+            val newBook = Book("test", "author", "science", 2002, 173, 4.99, false)
             assertEquals(5, populatedBooks!!.numberOfBooks())
             assertTrue(populatedBooks!!.add(newBook))
             assertEquals(6, populatedBooks!!.numberOfBooks())
@@ -58,7 +58,7 @@ class BookAPITest {
 
         @Test
         fun `adding a Book to an empty list adds to ArrayList`() {
-            val newBook = Book("test", "author", "science", 2002, 173, 4.99f, false)
+            val newBook = Book("test", "author", "science", 2002, 173, 4.99, false)
             assertEquals(0, emptyBooks!!.numberOfBooks())
             assertTrue(emptyBooks!!.add(newBook))
             assertEquals(1, emptyBooks!!.numberOfBooks())

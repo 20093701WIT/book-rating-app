@@ -6,7 +6,7 @@ data class Book(
     val BookGenre: String,
     val BookReleaseYear:Int,
     val BookLength: Int,
-    val BookPrice: Float,
+    val BookPrice: Double,
     val BookIsRecommended: Boolean
      ){
 }
