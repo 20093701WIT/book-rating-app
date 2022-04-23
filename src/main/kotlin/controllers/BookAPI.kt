@@ -35,4 +35,41 @@ class BookAPI {
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
     }
+
+    fun listRecommendedBooks(): String {
+        return if (numberOfBooks() == 0) {
+            "No books stored"
+        } else {
+            var listOfRecommendedBooks = ""
+            for (book in books) {
+                if (book.BookIsRecommended) {
+                    listOfRecommendedBooks += "${books.indexOf(book)}: $book \n"
+                }
+            }
+            listOfRecommendedBooks
+        }
+    }
+
+    fun listNotRecommendedBooks(): String {
+        return if (numberOfBooks() == 0) {
+            "No books stored"
+        } else {
+            var listOfNotRecommendedBooks = ""
+            for (book in books) {
+                if (!book.BookIsRecommended) {
+                    listOfNotRecommendedBooks += "${books.indexOf(book)}: $book \n"
+                }
+            }
+            listOfNotRecommendedBooks
+        }
+    }
+
+    fun listByHighestPrice() =
+        books.sortedByDescending { books -> books.BookPrice } //Descending means high to low
+            .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
+
+    fun listByLowestPrice() =
+        books.sortedBy { books -> books.BookPrice }
+            .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
+
 }
