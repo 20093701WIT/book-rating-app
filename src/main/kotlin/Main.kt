@@ -87,7 +87,17 @@ fun updateBook(){
 }
 
 fun deleteBook(){
-    logger.info { "deleteBook() function invoked" }
+    listBooks()
+    //checks to see if any books exist. if they don't then it won't ask to delete
+    if (bookAPI.numberOfBooks() > 0) {
+        val indexToDelete = readNextInt("Enter the index of the book to delete: ")
+        val bookToDelete = bookAPI.deleteBook(indexToDelete)
+        if (bookToDelete != null) {
+            println("Delete Successful! Deleted book: ${bookToDelete.BookTitle}")
+        } else {
+            println("Delete NOT Successful")
+        }
+    }
 }
 
 fun listByHighestPrice() {

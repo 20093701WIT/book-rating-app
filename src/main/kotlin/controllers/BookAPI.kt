@@ -71,5 +71,10 @@ class BookAPI {
     fun listByLowestPrice() =
         books.sortedBy { books -> books.BookPrice }
             .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
-
+    
+    fun deleteBook(indexToDelete: Int): Book? {
+        return if (isValidListIndex(indexToDelete, books)) {
+            books.removeAt(indexToDelete)
+        } else null
+    }
 }
