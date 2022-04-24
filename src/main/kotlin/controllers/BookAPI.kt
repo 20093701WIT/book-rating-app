@@ -77,4 +77,22 @@ class BookAPI {
             books.removeAt(indexToDelete)
         } else null
     }
+
+    fun updateBook(indexToUpdate: Int, book: Book?): Boolean {
+        val foundBook = findBook(indexToUpdate)
+        if ((foundBook != null) && (book != null)) {
+            foundBook.BookTitle = book.BookTitle
+            foundBook.BookAuthor = book.BookAuthor
+            foundBook.BookGenre = book.BookGenre
+            foundBook.BookReleaseYear = book.BookReleaseYear
+            foundBook.BookLength = book.BookLength
+            foundBook.BookPrice = book.BookPrice
+            return true
+        }
+        return false
+    }
+
+    fun isValidIndex(index: Int) :Boolean{
+        return isValidListIndex(index, books);
+    }
 }
