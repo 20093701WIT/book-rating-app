@@ -1,6 +1,7 @@
 import controllers.BookAPI
 import models.Book
 import mu.KotlinLogging
+import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextDouble
@@ -11,6 +12,7 @@ import java.lang.System.exit
 
 private val logger = KotlinLogging.logger {}
 private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
+private val bookAPIJSON = BookAPI(JSONSerializer(File("books.json")))
 
 
 fun main(args: Array<String>) {
@@ -35,6 +37,9 @@ fun mainMenu() : Int {
          > |   20) Load XML file            |
          > |   21) Save XML file            |
          > ----------------------------------
+         > |   22) Load JSON file           |
+         > |   23) Save JSON file           |
+         > ----------------------------------
          > |   0) Exit                      |
          > ----------------------------------
          > ==>> """.trimMargin(">"))
@@ -54,6 +59,8 @@ fun runMenu() {
             8  -> listByLowestPrice()
             20 -> XMLload()
             21 -> XMLsave()
+            22 -> JSONload()
+            23 -> JSONsave()
             0  -> exitApp()
             else -> System.out.println("Invalid option entered: " + option)
         }
@@ -146,6 +153,24 @@ fun XMLsave() {
 fun XMLload() {
     try {
         bookAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
+}
+
+// PERSISTENCE - JSON
+
+fun JSONsave() {
+    try {
+        bookAPIJSON.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
+}
+
+fun JSONload() {
+    try {
+        bookAPIJSON.load()
     } catch (e: Exception) {
         System.err.println("Error reading from file: $e")
     }
