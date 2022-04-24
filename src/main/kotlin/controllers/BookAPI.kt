@@ -1,10 +1,14 @@
 package controllers
 
 import models.Book
+import persistence.Serializer
 
 private var books = ArrayList<Book>()
 
-class BookAPI {
+class BookAPI (serializerType: Serializer) {
+    private var serializer: Serializer = serializerType
+
+
     fun add(book: Book): Boolean {
         return books.add(book)
     }
@@ -94,5 +98,16 @@ class BookAPI {
 
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, books);
+    }
+
+    //XML
+    @Throws(Exception::class)
+    fun load() {
+        books = serializer.read() as ArrayList<Book>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(books)
     }
 }
