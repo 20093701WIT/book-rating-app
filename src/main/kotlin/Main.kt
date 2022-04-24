@@ -83,8 +83,26 @@ fun listNotRecommendedBooks(){
 }
 
 fun updateBook(){
-    logger.info { "updateBook() function invoked" }
-}
+    listBooks()
+    if (bookAPI.numberOfBooks() > 0) {
+        val indexToUpdate = readNextInt("Enter the index of the note to update: ")
+        if (bookAPI.isValidIndex(indexToUpdate)) {
+            val bookTitle = readNextLine("Enter a title for the book: ")
+            val bookAuthor = readNextLine("Enter the author for the book: ")
+            val bookGenre = readNextLine("Enter the main genre of the book: ")
+            val bookReleaseYear = readNextInt("Enter the release year of the book: ")
+            val bookLength = readNextInt("Enter how many pages are in the book: ")
+            var bookPrice = readNextDouble("Enter how much the book cost (in euro): ")
+
+            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, false))){
+                println("Update Successful")
+            } else {
+                println("Update Failed")
+            }
+        } else {
+            println("There are no notes for this index number")
+        }
+    }}
 
 fun deleteBook(){
     listBooks()

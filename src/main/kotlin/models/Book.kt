@@ -1,12 +1,12 @@
 package models
 
 data class Book(
-    val BookTitle: String,
-    val BookAuthor: String,
-    val BookGenre: String,
-    val BookReleaseYear:Int,
-    val BookLength: Int,
-    val BookPrice: Double,
-    val BookIsRecommended: Boolean
+    var BookTitle: String,
+    var BookAuthor: String,
+    var BookGenre: String,
+    var BookReleaseYear:Int,
+    var BookLength: Int,
+    var BookPrice: Double,
+    var BookIsRecommended: Boolean
      ){
 }
