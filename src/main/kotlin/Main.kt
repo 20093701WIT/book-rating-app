@@ -1,15 +1,17 @@
 import controllers.BookAPI
 import models.Book
 import mu.KotlinLogging
+import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextDouble
-import utils.ScannerInput.readNextFloat
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import java.io.File
 import java.lang.System.exit
 
 private val logger = KotlinLogging.logger {}
-private val bookAPI = BookAPI()
+private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
+
 
 fun main(args: Array<String>) {
     runMenu()
@@ -30,6 +32,9 @@ fun mainMenu() : Int {
          > |   7) List by highest price     |
          > |   8) List by lowest price      |
          > ----------------------------------
+         > |   20) Load XML file            |
+         > |   21) Save XML file            |
+         > ----------------------------------
          > |   0) Exit                      |
          > ----------------------------------
          > ==>> """.trimMargin(">"))
@@ -47,6 +52,8 @@ fun runMenu() {
             6  -> listNotRecommendedBooks()
             7  -> listByHighestPrice()
             8  -> listByLowestPrice()
+            20 -> XMLload()
+            21 -> XMLsave()
             0  -> exitApp()
             else -> System.out.println("Invalid option entered: " + option)
         }
@@ -124,6 +131,24 @@ fun listByHighestPrice() {
 
 fun listByLowestPrice() {
     println(bookAPI.listByLowestPrice())
+}
+
+//PERSISTENCE - XML
+
+fun XMLsave() {
+    try {
+        bookAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
+}
+
+fun XMLload() {
+    try {
+        bookAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
 }
 
 fun exitApp(){
