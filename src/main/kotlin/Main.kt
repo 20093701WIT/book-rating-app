@@ -74,8 +74,9 @@ fun addBook(){
     val bookReleaseYear = readNextInt("Enter book release year: ")
     val bookLength = readNextInt("Enter book length: ")
     val bookPrice = readNextDouble("Enter book price (in Euro): ")
+    //val bookRecommendation = readNextInt("Do you recommend the book? (0 = no, 1 = yes): ")
+
     val isAdded = bookAPI.add(Book(bookTitle, bookAuthor,bookGenre, bookReleaseYear, bookLength, bookPrice, false ))
-    //val bookIsRecommended
 
     if (isAdded) {
         println("Added Successfully")
