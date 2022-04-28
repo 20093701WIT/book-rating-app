@@ -86,8 +86,71 @@ fun addBook(){
 }
 
 fun listBooks(){
+    if (bookAPI.numberOfBooks() > 0) {
+        val option = readNextInt(
+            """
+                  > --------------------------------
+                  > |   1) View ALL books          |
+                  > |   2) View fiction books      |
+                  > |   3) View sci-fi books       |
+                  > |   4) View nonfiction books   |
+                  > |   5) View educational books  |
+                  > |   6) View children books     |
+                  > |   7) View drama books        |
+                  > |   8) View media books        |
+                  > --------------------------------
+         > ==>> """.trimMargin(">"))
+
+        when (option) {
+            1 -> listAllBooks()
+            2 -> listFictionBooks()
+            3 -> listScifiBooks()
+            4 -> listNonfictionBooks()
+            5 -> listEducationalBooks()
+            6 -> listChildrenBooks()
+            7 -> listDramaBooks()
+            8 -> listMediaBooks()
+            else -> println("Invalid option entered: " + option);
+        }
+    } else {
+        println("Option Invalid - No notes stored");
+    }
+}
+
+// LISTING BOOK GENRE/RECOMMENDATION
+
+fun listAllBooks() {
     println(bookAPI.listAllBooks())
 }
+
+fun listFictionBooks() {
+    println("Fiction")
+}
+
+fun listScifiBooks() {
+    println("Sci-fi")
+}
+
+fun listNonfictionBooks() {
+    println("Non Fiction")
+}
+
+fun listEducationalBooks() {
+    println("Educational")
+}
+
+fun listChildrenBooks() {
+    println("Children")
+}
+
+fun listDramaBooks() {
+    println("Drama")
+}
+
+fun listMediaBooks() {
+    println("Media")
+}
+
 
 fun listRecommendedBooks(){
     println(bookAPI.listRecommendedBooks())
@@ -95,6 +158,14 @@ fun listRecommendedBooks(){
 
 fun listNotRecommendedBooks(){
     println(bookAPI.listNotRecommendedBooks())
+}
+
+fun listByHighestPrice() {
+    println(bookAPI.listByHighestPrice())
+}
+
+fun listByLowestPrice() {
+    println(bookAPI.listByLowestPrice())
 }
 
 fun updateBook(){
@@ -131,14 +202,6 @@ fun deleteBook(){
             println("Delete NOT Successful")
         }
     }
-}
-
-fun listByHighestPrice() {
-    println(bookAPI.listByHighestPrice())
-}
-
-fun listByLowestPrice() {
-    println(bookAPI.listByLowestPrice())
 }
 
 //PERSISTENCE - XML
