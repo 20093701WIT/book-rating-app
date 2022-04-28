@@ -74,9 +74,12 @@ fun addBook(){
     val bookReleaseYear = readNextInt("Enter book release year: ")
     val bookLength = readNextInt("Enter book length: ")
     val bookPrice = readNextDouble("Enter book price (in Euro): ")
-    //val bookRecommendation = readNextInt("Do you recommend the book? (0 = no, 1 = yes): ")
+    //if you write anything but true, it will default to false.
+    //I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
+    //as it would end the programme if true/false wasn't entered.
+    val bookRecommendation = readNextLine("Do you recommend the book? (true/false): ").toBoolean()
 
-    val isAdded = bookAPI.add(Book(bookTitle, bookAuthor,bookGenre, bookReleaseYear, bookLength, bookPrice, false ))
+    val isAdded = bookAPI.add(Book(bookTitle, bookAuthor,bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation ))
 
     if (isAdded) {
         println("Added Successfully")
@@ -179,8 +182,13 @@ fun updateBook(){
             val bookReleaseYear = readNextInt("Enter the release year of the book: ")
             val bookLength = readNextInt("Enter how many pages are in the book: ")
             var bookPrice = readNextDouble("Enter how much the book cost (in euro): ")
+            //if you write anything but true, it will default to false.
+            //I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
+            //as it would end the programme if true/false wasn't entered.
+            val bookRecommendation = readNextLine("Do you recommend the book? (true/false): ").toBoolean()
 
-            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, false))){
+
+            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))){
                 println("Update Successful")
             } else {
                 println("Update Failed")

@@ -91,6 +91,7 @@ class BookAPI (serializerType: Serializer) {
             foundBook.BookReleaseYear = book.BookReleaseYear
             foundBook.BookLength = book.BookLength
             foundBook.BookPrice = book.BookPrice
+            foundBook.BookIsRecommended = book.BookIsRecommended
             return true
         }
         return false
