@@ -3,6 +3,7 @@ import models.Book
 import mu.KotlinLogging
 import persistence.JSONSerializer
 import persistence.XMLSerializer
+import utils.CategoryUtility.isValidCategory
 import utils.ScannerInput
 import utils.ScannerInput.readNextDouble
 import utils.ScannerInput.readNextInt
@@ -72,7 +73,7 @@ fun runMenu() {
 fun addBook(){
     val bookTitle = readNextLine("Enter book title: ")
     val bookAuthor = readNextLine("Enter book author: ")
-    //set to lowercase for search by genre code in BookAPI (ln 98 - ln )
+    //set to lowercase for search by genre code in BookAPI (ln 98 - ln 119)
     val bookGenre = readNextLine("Enter book genre: ").lowercase()
     val bookReleaseYear = readNextInt("Enter book release year: ")
     val bookLength = readNextInt("Enter book length: ")
@@ -82,10 +83,11 @@ fun addBook(){
     //as it would end the programme if true/false wasn't entered.
     val bookRecommendation = readNextLine("Do you recommend the book? (true/false): ").toBoolean()
 
-    val isAdded = bookAPI.add(Book(bookTitle, bookAuthor,bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation ))
-
-    if (isAdded) {
-        println("Added Successfully")
+    // BOOK GENRE VALIDATION
+    val bookGenreValidation = isValidCategory(bookGenre)
+    if (bookGenreValidation) {
+        bookAPI.add(Book(bookTitle, bookAuthor,bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))
+        println("Added successfully")
     } else {
         println("Add Failed")
     }
@@ -198,7 +200,7 @@ fun updateBook(){
         if (bookAPI.isValidIndex(indexToUpdate)) {
             val bookTitle = readNextLine("Enter a title for the book: ")
             val bookAuthor = readNextLine("Enter the author for the book: ")
-            val bookGenre = readNextLine("Enter the main genre of the book: ")
+            val bookGenre = readNextLine("Enter the main genre of the book: ").lowercase()
             val bookReleaseYear = readNextInt("Enter the release year of the book: ")
             val bookLength = readNextInt("Enter how many pages are in the book: ")
             var bookPrice = readNextDouble("Enter how much the book cost (in euro): ")
@@ -207,8 +209,9 @@ fun updateBook(){
             //as it would end the programme if true/false wasn't entered.
             val bookRecommendation = readNextLine("Do you recommend the book? (true/false): ").toBoolean()
 
-
-            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))){
+            val bookGenreValidation = isValidCategory(bookGenre)
+            if (bookGenreValidation) {
+                bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))
                 println("Update Successful")
             } else {
                 println("Update Failed")
