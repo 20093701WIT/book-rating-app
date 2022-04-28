@@ -13,17 +13,11 @@ class BookAPI (serializerType: Serializer) {
         return books.add(book)
     }
 
-    fun listAllBooks(): String {
-        return if (books.isEmpty()) {
-            "No Books stored"
-        } else {
-            var listOfBooks = ""
-            for (i in books.indices) {
-                listOfBooks += "${i}: ${books[i]} \n"
-            }
-            listOfBooks
-        }
-    }
+    fun listAllBooks(): String =
+        if (books.isEmpty())
+            "No books stored"
+        else
+            formatListString(books)
 
     fun numberOfBooks(): Int {
         return books.size
@@ -40,33 +34,22 @@ class BookAPI (serializerType: Serializer) {
         return (index >= 0 && index < list.size)
     }
 
-    fun listRecommendedBooks(): String {
-        return if (numberOfBooks() == 0) {
-            "No books stored"
-        } else {
-            var listOfRecommendedBooks = ""
-            for (book in books) {
-                if (book.BookIsRecommended) {
-                    listOfRecommendedBooks += "${books.indexOf(book)}: $book \n"
-                }
-            }
-            listOfRecommendedBooks
-        }
-    }
+    fun formatListString(notesToFormat: List<Book>): String =
+        notesToFormat
+            .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
 
-    fun listNotRecommendedBooks(): String {
-        return if (numberOfBooks() == 0) {
-            "No books stored"
-        } else {
-            var listOfNotRecommendedBooks = ""
-            for (book in books) {
-                if (!book.BookIsRecommended) {
-                    listOfNotRecommendedBooks += "${books.indexOf(book)}: $book \n"
-                }
-            }
-            listOfNotRecommendedBooks
-        }
-    }
+    fun numberOfRecommendedBooks(): Int = books.count { book: Book -> book.BookIsRecommended }
+    fun numberOfNotRecommendedBooks(): Int = books.count { book: Book -> book.BookIsRecommended }
+
+
+    fun listRecommendedBooks(): String =
+        if (numberOfRecommendedBooks() == 0) "No recommended books"
+        else formatListString(books.filter { book -> book.BookIsRecommended })
+
+
+    fun listNotRecommendedBooks(): String =
+        if (numberOfNotRecommendedBooks() == 0) "No non recommended books"
+        else formatListString(books.filter { book -> !book.BookIsRecommended })
 
     fun listByHighestPrice() =
         books.sortedByDescending { books -> books.BookPrice } //Descending means high to low
@@ -111,4 +94,36 @@ class BookAPI (serializerType: Serializer) {
     fun store() {
         serializer.write(books)
     }
+
+    //LIST AND COUNT BOOK GENRES
+
+    fun numberOfFictionBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("fiction") }
+
+    fun numberOfScifiBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("sci-fi")}
+
+    fun numberOfNonfictionBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("non fiction")}
+
+    fun numberOfEducationBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("education")}
+
+    fun numberOfChildrenBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("children")}
+
+    fun numberOfDramaBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("drama")}
+
+    fun numberOfMediaBooks(): Int =
+        books.count { book: Book -> book.BookGenre.contains("media")}
+
+    fun listBooksByGenre(s: String) =
+        books.filter { book -> book.BookGenre.contains(s)}
+            .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
+
+    fun listBooksByTitle (s: String) =
+        books.filter { book -> book.BookTitle.contains(s)}
+            .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
+
 }

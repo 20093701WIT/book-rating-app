@@ -33,6 +33,7 @@ fun mainMenu() : Int {
          > |   6) List not recommended books|
          > |   7) List by highest price     |
          > |   8) List by lowest price      |
+         > |   9) Search by book title      |
          > ----------------------------------
          > |   20) Load XML file            |
          > |   21) Save XML file            |
@@ -57,6 +58,7 @@ fun runMenu() {
             6  -> listNotRecommendedBooks()
             7  -> listByHighestPrice()
             8  -> listByLowestPrice()
+            9  -> searchByBookTitle()
             20 -> XMLload()
             21 -> XMLsave()
             22 -> JSONload()
@@ -70,7 +72,8 @@ fun runMenu() {
 fun addBook(){
     val bookTitle = readNextLine("Enter book title: ")
     val bookAuthor = readNextLine("Enter book author: ")
-    val bookGenre = readNextLine("Enter book genre: ")
+    //set to lowercase for search by genre code in BookAPI (ln 98 - ln )
+    val bookGenre = readNextLine("Enter book genre: ").lowercase()
     val bookReleaseYear = readNextInt("Enter book release year: ")
     val bookLength = readNextInt("Enter book length: ")
     val bookPrice = readNextDouble("Enter book price (in Euro): ")
@@ -120,38 +123,55 @@ fun listBooks(){
     }
 }
 
+fun searchByBookTitle() {
+    val search = readNextLine("Enter title of note you want to find: ")
+    val results = bookAPI.listBooksByTitle(search)
+    if (results.isEmpty()) {
+        println("no books with matching title")
+    } else {
+        println(results)
+    }
+}
+
 // LISTING BOOK GENRE/RECOMMENDATION
 
 fun listAllBooks() {
-    println(bookAPI.listAllBooks())
+    println("There are " + bookAPI.listAllBooks() + " total books.")
 }
 
 fun listFictionBooks() {
-    println("Fiction")
+    println("There are " + bookAPI.numberOfFictionBooks() + " fiction books.")
+    println(bookAPI.listBooksByGenre("fiction"))
 }
 
 fun listScifiBooks() {
-    println("Sci-fi")
+    println("There are " + bookAPI.numberOfScifiBooks() + " Science-fiction books.")
+    println(bookAPI.listBooksByGenre("sci-fi"))
 }
 
 fun listNonfictionBooks() {
-    println("Non Fiction")
+    println("There are " + bookAPI.numberOfNonfictionBooks() + "Non fiction books.")
+    println(bookAPI.listBooksByGenre("non fiction"))
 }
 
 fun listEducationalBooks() {
-    println("Educational")
+    println("There are " + bookAPI.numberOfEducationBooks() + "Educational books.")
+    println(bookAPI.listBooksByGenre("education"))
 }
 
 fun listChildrenBooks() {
-    println("Children")
+    println("There are " + bookAPI.numberOfChildrenBooks() + "Children books.")
+    println(bookAPI.listBooksByGenre("children"))
 }
 
 fun listDramaBooks() {
-    println("Drama")
+    println("There are " + bookAPI.numberOfDramaBooks() + " Drama books.")
+    println(bookAPI.listBooksByGenre("drama"))
 }
 
 fun listMediaBooks() {
-    println("Media")
+    println("There are " + bookAPI.numberOfMediaBooks() + " Media books.")
+    println(bookAPI.listBooksByGenre("media"))
 }
 
 
