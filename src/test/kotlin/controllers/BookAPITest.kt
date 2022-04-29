@@ -10,6 +10,7 @@ import persistence.XMLSerializer
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 
@@ -107,4 +108,203 @@ class BookAPITest {
         }
     }
 
+    @Nested
+    inner class DeleteBooks {
+
+        @Test
+        fun `deleting a Book that does not exist, returns null`() {
+            emptyBooks!!.clearArray()
+            assertNull(emptyBooks!!.deleteBook(0))
+            assertNull(populatedBooks!!.deleteBook(-1))
+            assertNull(populatedBooks!!.deleteBook(5))
+        }
+
+        @Test
+        fun `deleting a book that exists delete and returns deleted object`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            assertEquals(wimpyKid1, populatedBooks!!.deleteBook(3))
+            assertEquals(4, populatedBooks!!.numberOfBooks())
+            assertEquals(wonder, populatedBooks!!.deleteBook(0))
+            assertEquals(3, populatedBooks!!.numberOfBooks())
+        }
+    }
+
+    @Nested
+    inner class ListBooks {
+
+        @Test
+        fun `listAllBooks returns No Books Stored message when ArrayList is empty`() {
+            emptyBooks!!.clearArray()
+            assertEquals(0, emptyBooks!!.numberOfBooks())
+            assertTrue(emptyBooks!!.listAllBooks().lowercase().contains("no books"))
+        }
+
+        @Test
+        fun `listAllBooks returns Books when ArrayList has books stored`() {
+            emptyBooks!!.clearArray()
+            //This is a hot-fix to the problem relating to me having to manually flush the array.
+            populatedBooks!!.add(wonder!!)
+            populatedBooks!!.add(noLongerHuman!!)
+            populatedBooks!!.add(rollOfThunder!!)
+            populatedBooks!!.add(wimpyKid1!!)
+            populatedBooks!!.add(gatsby!!)
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            val booksString = populatedBooks!!.listAllBooks().lowercase()
+            assertTrue(booksString.contains("wonder"))
+            assertTrue(booksString.contains("no longer"))
+            assertTrue(booksString.contains("roll of"))
+            assertTrue(booksString.contains("diary of a"))
+            assertTrue(booksString.contains("the great"))
+        }
+    }
+    //HERE
+    /*
+    @Nested
+    inner class PersistenceTests {
+
+        @Test
+        fun `saving and loading an empty collection in XML doesn't crash app`() {
+            // Saving an empty notes.XML file.
+            val storingNotes = NoteAPI(XMLSerializer(File("notes.xml")))
+            storingNotes.store()
+
+            // Loading the empty notes.xml file into a new object
+            val loadedNotes = NoteAPI(XMLSerializer(File("notes.xml")))
+            loadedNotes.load()
+
+            // Comparing the source of the notes (storingNotes) with the XML loaded notes (loadedNotes)
+            assertEquals(0, storingNotes.numberOfNotes())
+            assertEquals(0, loadedNotes.numberOfNotes())
+            assertEquals(storingNotes.numberOfNotes(), loadedNotes.numberOfNotes())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in XML doesn't loose data`() {
+            // Storing 3 notes to the notes.XML file.
+            val storingNotes = NoteAPI(XMLSerializer(File("notes.xml")))
+            storingNotes.add(testApp!!)
+            storingNotes.add(swim!!)
+            storingNotes.add(summerHoliday!!)
+            storingNotes.store()
+
+            // Loading notes.xml into a different collection
+            val loadedNotes = NoteAPI(XMLSerializer(File("notes.xml")))
+            loadedNotes.load()
+
+            // Comparing the source of the notes (storingNotes) with the XML loaded notes (loadedNotes)
+            assertEquals(3, storingNotes.numberOfNotes())
+            assertEquals(3, loadedNotes.numberOfNotes())
+            assertEquals(storingNotes.numberOfNotes(), loadedNotes.numberOfNotes())
+            assertEquals(storingNotes.findNote(0), loadedNotes.findNote(0))
+            assertEquals(storingNotes.findNote(1), loadedNotes.findNote(1))
+            assertEquals(storingNotes.findNote(2), loadedNotes.findNote(2))
+        }
+
+        @Test
+        fun `saving and loading an empty collection in JSON doesn't crash app`() {
+            // Saving an empty notes.json file.
+            val storingNotes = NoteAPI(JSONSerializer(File("notes.json")))
+            storingNotes.store()
+
+            // Loading the empty notes.json file into a new object
+            val loadedNotes = NoteAPI(JSONSerializer(File("notes.json")))
+            loadedNotes.load()
+
+            // Comparing the source of the notes (storingNotes) with the json loaded notes (loadedNotes)
+            assertEquals(0, storingNotes.numberOfNotes())
+            assertEquals(0, loadedNotes.numberOfNotes())
+            assertEquals(storingNotes.numberOfNotes(), loadedNotes.numberOfNotes())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in JSON doesn't loose data`() {
+            // Storing 3 notes to the notes.json file.
+            val storingNotes = NoteAPI(JSONSerializer(File("notes.json")))
+            storingNotes.add(testApp!!)
+            storingNotes.add(swim!!)
+            storingNotes.add(summerHoliday!!)
+            storingNotes.store()
+
+            // Loading notes.json into a different collection
+            val loadedNotes = NoteAPI(JSONSerializer(File("notes.json")))
+            loadedNotes.load()
+
+            // Comparing the source of the notes (storingNotes) with the json loaded notes (loadedNotes)
+            assertEquals(3, storingNotes.numberOfNotes())
+            assertEquals(3, loadedNotes.numberOfNotes())
+            assertEquals(storingNotes.numberOfNotes(), loadedNotes.numberOfNotes())
+            assertEquals(storingNotes.findNote(0), loadedNotes.findNote(0))
+            assertEquals(storingNotes.findNote(1), loadedNotes.findNote(1))
+            assertEquals(storingNotes.findNote(2), loadedNotes.findNote(2))
+        }
+    }
+
+    @Nested
+    inner class CountingMethods {
+
+        @Test
+        fun numberOfNotesCalculatedCorrectly() {
+            assertEquals(5, populatedNotes!!.numberOfNotes())
+            assertEquals(0, emptyNotes!!.numberOfNotes())
+        }
+
+        @Test
+        fun numberOfArchivedNotesCalculatedCorrectly() {
+            assertEquals(2, populatedNotes!!.numberOfArchivedNotes())
+            assertEquals(0, emptyNotes!!.numberOfArchivedNotes())
+        }
+
+        @Test
+        fun numberOfActiveNotesCalculatedCorrectly() {
+            assertEquals(3, populatedNotes!!.numberOfActiveNotes())
+            assertEquals(0, emptyNotes!!.numberOfActiveNotes())
+        }
+
+        @Test
+        fun numberOfNotesByPriorityCalculatedCorrectly() {
+            assertEquals(1, populatedNotes!!.numberOfNotesByPriority(1))
+            assertEquals(0, populatedNotes!!.numberOfNotesByPriority(2))
+            assertEquals(1, populatedNotes!!.numberOfNotesByPriority(3))
+            assertEquals(2, populatedNotes!!.numberOfNotesByPriority(4))
+            assertEquals(1, populatedNotes!!.numberOfNotesByPriority(5))
+            assertEquals(0, emptyNotes!!.numberOfNotesByPriority(1))
+        }
+    }
+
+    @Nested
+    inner class SearchMethods {
+
+        @Test
+        fun `search notes by title returns no notes when no notes with that title exist`() {
+            // Searching a populated collection for a title that doesn't exist.
+            assertEquals(5, populatedNotes!!.numberOfNotes())
+            val searchResults = populatedNotes!!.searchByTitle("no results expected")
+            assertTrue(searchResults.isEmpty())
+
+            // Searching an empty collection
+            assertEquals(0, emptyNotes!!.numberOfNotes())
+            assertTrue(emptyNotes!!.searchByTitle("").isEmpty())
+        }
+
+        @Test
+        fun `search notes by title returns notes when notes with that title exist`() {
+            assertEquals(5, populatedNotes!!.numberOfNotes())
+
+            // Searching a populated collection for a full title that exists (case matches exactly)
+            var searchResults = populatedNotes!!.searchByTitle("Code App")
+            assertTrue(searchResults.contains("Code App"))
+            assertFalse(searchResults.contains("Test App"))
+
+            // Searching a populated collection for a partial title that exists (case matches exactly)
+            searchResults = populatedNotes!!.searchByTitle("App")
+            assertTrue(searchResults.contains("Code App"))
+            assertTrue(searchResults.contains("Test App"))
+            assertFalse(searchResults.contains("Swim - Pool"))
+
+            // Searching a populated collection for a partial title that exists (case doesn't match)
+            searchResults = populatedNotes!!.searchByTitle("aPp")
+            assertTrue(searchResults.contains("Code App"))
+            assertTrue(searchResults.contains("Test App"))
+            assertFalse(searchResults.contains("Swim - Pool"))
+        } */
 }
