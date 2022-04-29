@@ -3,13 +3,13 @@
 import models.Book
 import persistence.Serializer
 
-<span class="fc" id="L6">private var books = ArrayList&lt;Book&gt;()</span>
+<span class="nc" id="L6">private var books = ArrayList&lt;Book&gt;()</span>
 
-<span class="fc" id="L8">class BookAPI(serializerType: Serializer) {</span>
-<span class="fc" id="L9">    private var serializer: Serializer = serializerType</span>
+<span class="nc" id="L8">class BookAPI(serializerType: Serializer) {</span>
+<span class="nc" id="L9">    private var serializer: Serializer = serializerType</span>
 
     fun add(book: Book): Boolean {
-<span class="fc" id="L12">        return books.add(book)</span>
+<span class="nc" id="L12">        return books.add(book)</span>
     }
 
     fun listAllBooks(): String =
@@ -19,18 +19,18 @@ import persistence.Serializer
 <span class="nc" id="L19">            formatListString(books)</span>
 
     fun numberOfBooks(): Int {
-<span class="fc" id="L22">        return books.size</span>
+<span class="nc" id="L22">        return books.size</span>
     }
 
     fun findBook(index: Int): Book? {
-<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        return if (isValidListIndex(index, books)) {</span>
-<span class="fc" id="L27">            books[index]</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        return if (isValidListIndex(index, books)) {</span>
+<span class="nc" id="L27">            books[index]</span>
 <span class="nc" id="L28">        } else null</span>
     }
 
     // utility method to determine if an index is valid in a list.
     fun isValidListIndex(index: Int, list: List&lt;Any&gt;): Boolean {
-<span class="pc bpc" id="L33" title="2 of 4 branches missed.">        return (index &gt;= 0 &amp;&amp; index &lt; list.size)</span>
+<span class="nc bnc" id="L33" title="All 4 branches missed.">        return (index &gt;= 0 &amp;&amp; index &lt; list.size)</span>
     }
 
     fun formatListString(notesToFormat: List&lt;Book&gt;): String =
@@ -122,5 +122,9 @@ import persistence.Serializer
     fun listBooksByTitle(s: String) =
 <span class="nc bnc" id="L123" title="All 2 branches missed.">        books.filter { book -&gt; book.BookTitle.contains(s) }</span>
 <span class="nc" id="L124">            .joinToString { book -&gt; books.indexOf(book).toString() + &quot;: &quot; + book.toString() + &quot;\n&quot; }</span>
+
+    fun clearArray() {
+<span class="nc" id="L127">        books.clear()</span>
+<span class="nc" id="L128">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
