@@ -1,27 +1,24 @@
 import controllers.BookAPI
 import models.Book
-import mu.KotlinLogging
 import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.CategoryUtility.isValidCategory
-import utils.ScannerInput
 import utils.ScannerInput.readNextDouble
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import java.io.File
 import java.lang.System.exit
 
-private val logger = KotlinLogging.logger {}
 private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
 private val bookAPIJSON = BookAPI(JSONSerializer(File("books.json")))
 
-
-fun main(args: Array<String>) {
+fun main() {
     runMenu()
 }
 
-fun mainMenu() : Int {
-    return ScannerInput.readNextInt(""" 
+fun mainMenu(): Int {
+    return readNextInt(
+        """ 
          > ----------------------------------
          > |        BOOK RATING APP         |
          > ----------------------------------
@@ -44,56 +41,57 @@ fun mainMenu() : Int {
          > ----------------------------------
          > |   0) Exit                      |
          > ----------------------------------
-         > ==>> """.trimMargin(">"))
+         > ==>> """.trimMargin(">")
+    )
 }
 
 fun runMenu() {
     do {
         val option = mainMenu()
         when (option) {
-            1  -> addBook()
-            2  -> listBooks()
-            3  -> updateBook()
-            4  -> deleteBook()
-            5  -> listRecommendedBooks()
-            6  -> listNotRecommendedBooks()
-            7  -> listByHighestPrice()
-            8  -> listByLowestPrice()
-            9  -> searchByBookTitle()
+            1 -> addBook()
+            2 -> listBooks()
+            3 -> updateBook()
+            4 -> deleteBook()
+            5 -> listRecommendedBooks()
+            6 -> listNotRecommendedBooks()
+            7 -> listByHighestPrice()
+            8 -> listByLowestPrice()
+            9 -> searchByBookTitle()
             20 -> XMLload()
             21 -> XMLsave()
             22 -> JSONload()
             23 -> JSONsave()
-            0  -> exitApp()
+            0 -> exitApp()
             else -> System.out.println("Invalid option entered: " + option)
         }
     } while (true)
 }
 
-fun addBook(){
+fun addBook() {
     val bookTitle = readNextLine("Enter book title: ")
     val bookAuthor = readNextLine("Enter book author: ")
-    //set to lowercase for search by genre code in BookAPI (ln 98 - ln 119)
+    // set to lowercase for search by genre code in BookAPI (ln 98 - ln 119)
     val bookGenre = readNextLine("Enter book genre: ").lowercase()
     val bookReleaseYear = readNextInt("Enter book release year: ")
     val bookLength = readNextInt("Enter book length: ")
     val bookPrice = readNextDouble("Enter book price (in Euro): ")
-    //if you write anything but true, it will default to false.
-    //I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
-    //as it would end the programme if true/false wasn't entered.
+    // if you write anything but true, it will default to false.
+    // I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
+    // as it would end the programme if true/false wasn't entered.
     val bookRecommendation = readNextLine("Do you recommend the book? (true/false): ").toBoolean()
 
     // BOOK GENRE VALIDATION
     val bookGenreValidation = isValidCategory(bookGenre)
     if (bookGenreValidation) {
-        bookAPI.add(Book(bookTitle, bookAuthor,bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))
+        bookAPI.add(Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))
         println("Added successfully")
     } else {
         println("Add Failed")
     }
 }
 
-fun listBooks(){
+fun listBooks() {
     if (bookAPI.numberOfBooks() > 0) {
         val option = readNextInt(
             """
@@ -107,7 +105,8 @@ fun listBooks(){
                   > |   7) View drama books        |
                   > |   8) View media books        |
                   > --------------------------------
-         > ==>> """.trimMargin(">"))
+         > ==>> """.trimMargin(">")
+        )
 
         when (option) {
             1 -> listAllBooks()
@@ -118,10 +117,10 @@ fun listBooks(){
             6 -> listChildrenBooks()
             7 -> listDramaBooks()
             8 -> listMediaBooks()
-            else -> println("Invalid option entered: " + option);
+            else -> println("Invalid option entered: " + option)
         }
     } else {
-        println("Option Invalid - No notes stored");
+        println("Option Invalid - No notes stored")
     }
 }
 
@@ -176,12 +175,11 @@ fun listMediaBooks() {
     println(bookAPI.listBooksByGenre("media"))
 }
 
-
-fun listRecommendedBooks(){
+fun listRecommendedBooks() {
     println(bookAPI.listRecommendedBooks())
 }
 
-fun listNotRecommendedBooks(){
+fun listNotRecommendedBooks() {
     println(bookAPI.listNotRecommendedBooks())
 }
 
@@ -193,7 +191,7 @@ fun listByLowestPrice() {
     println(bookAPI.listByLowestPrice())
 }
 
-fun updateBook(){
+fun updateBook() {
     listBooks()
     if (bookAPI.numberOfBooks() > 0) {
         val indexToUpdate = readNextInt("Enter the index of the note to update: ")
@@ -203,10 +201,10 @@ fun updateBook(){
             val bookGenre = readNextLine("Enter the main genre of the book: ").lowercase()
             val bookReleaseYear = readNextInt("Enter the release year of the book: ")
             val bookLength = readNextInt("Enter how many pages are in the book: ")
-            var bookPrice = readNextDouble("Enter how much the book cost (in euro): ")
-            //if you write anything but true, it will default to false.
-            //I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
-            //as it would end the programme if true/false wasn't entered.
+            val bookPrice = readNextDouble("Enter how much the book cost (in euro): ")
+            // if you write anything but true, it will default to false.
+            // I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
+            // as it would end the programme if true/false wasn't entered.
             val bookRecommendation = readNextLine("Do you recommend the book? (true/false): ").toBoolean()
 
             val bookGenreValidation = isValidCategory(bookGenre)
@@ -219,11 +217,12 @@ fun updateBook(){
         } else {
             println("There are no notes for this index number")
         }
-    }}
+    }
+}
 
-fun deleteBook(){
+fun deleteBook() {
     listBooks()
-    //checks to see if any books exist. if they don't then it won't ask to delete
+    // checks to see if any books exist. if they don't then it won't ask to delete
     if (bookAPI.numberOfBooks() > 0) {
         val indexToDelete = readNextInt("Enter the index of the book to delete: ")
         val bookToDelete = bookAPI.deleteBook(indexToDelete)
@@ -235,7 +234,7 @@ fun deleteBook(){
     }
 }
 
-//PERSISTENCE - XML
+// PERSISTENCE - XML
 
 fun XMLsave() {
     try {
@@ -271,7 +270,7 @@ fun JSONload() {
     }
 }
 
-fun exitApp(){
+fun exitApp() {
     println("Exiting...bye")
     exit(0)
 }
