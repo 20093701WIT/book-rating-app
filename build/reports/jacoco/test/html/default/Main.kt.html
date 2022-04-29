@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">book-rating-app</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Main.kt</span></div><h1>Main.kt</h1><pre class="source lang-java linenums">import controllers.BookAPI
+import models.Book
+import persistence.JSONSerializer
+import persistence.XMLSerializer
+import utils.CategoryUtility.isValidCategory
+import utils.ScannerInput.readNextDouble
+import utils.ScannerInput.readNextInt
+import utils.ScannerInput.readNextLine
+import java.io.File
+import java.lang.System.exit
+
+<span class="nc" id="L12">private val bookAPI = BookAPI(XMLSerializer(File(&quot;books.xml&quot;)))</span>
+<span class="nc" id="L13">private val bookAPIJSON = BookAPI(JSONSerializer(File(&quot;books.json&quot;)))</span>
+
+fun main() {
+<span class="nc" id="L16">    runMenu()</span>
+<span class="nc" id="L17">}</span>
+
+fun mainMenu(): Int {
+<span class="nc" id="L20">    return readNextInt(</span>
+        &quot;&quot;&quot; 
+         &gt; ----------------------------------
+         &gt; |        BOOK RATING APP         |
+         &gt; ----------------------------------
+         &gt; | BOOK RATING MENU               |
+         &gt; |   1) Add a book                |
+         &gt; |   2) List all books            |
+         &gt; |   3) Update a book             |
+         &gt; |   4) Delete a book             |
+         &gt; |   5) List recommended books    |
+         &gt; |   6) List not recommended books|
+         &gt; |   7) List by highest price     |
+         &gt; |   8) List by lowest price      |
+         &gt; |   9) Search by book title      |
+         &gt; ----------------------------------
+         &gt; |   20) Load XML file            |
+         &gt; |   21) Save XML file            |
+         &gt; ----------------------------------
+         &gt; |   22) Load JSON file           |
+         &gt; |   23) Save JSON file           |
+         &gt; ----------------------------------
+         &gt; |   0) Exit                      |
+         &gt; ----------------------------------
+<span class="nc" id="L44">         &gt; ==&gt;&gt; &quot;&quot;&quot;.trimMargin(&quot;&gt;&quot;)</span>
+    )
+}
+
+fun runMenu() {
+    do {
+<span class="nc" id="L50">        val option = mainMenu()</span>
+<span class="nc bnc" id="L51" title="All 15 branches missed.">        when (option) {</span>
+<span class="nc" id="L52">            1 -&gt; addBook()</span>
+<span class="nc" id="L53">            2 -&gt; listBooks()</span>
+<span class="nc" id="L54">            3 -&gt; updateBook()</span>
+<span class="nc" id="L55">            4 -&gt; deleteBook()</span>
+<span class="nc" id="L56">            5 -&gt; listRecommendedBooks()</span>
+<span class="nc" id="L57">            6 -&gt; listNotRecommendedBooks()</span>
+<span class="nc" id="L58">            7 -&gt; listByHighestPrice()</span>
+<span class="nc" id="L59">            8 -&gt; listByLowestPrice()</span>
+<span class="nc" id="L60">            9 -&gt; searchByBookTitle()</span>
+<span class="nc" id="L61">            20 -&gt; XMLload()</span>
+<span class="nc" id="L62">            21 -&gt; XMLsave()</span>
+<span class="nc" id="L63">            22 -&gt; JSONload()</span>
+<span class="nc" id="L64">            23 -&gt; JSONsave()</span>
+<span class="nc" id="L65">            0 -&gt; exitApp()</span>
+<span class="nc" id="L66">            else -&gt; System.out.println(&quot;Invalid option entered: &quot; + option)</span>
+        }
+<span class="nc" id="L68">    } while (true)</span>
+}
+
+fun addBook() {
+<span class="nc" id="L72">    val bookTitle = readNextLine(&quot;Enter book title: &quot;)</span>
+<span class="nc" id="L73">    val bookAuthor = readNextLine(&quot;Enter book author: &quot;)</span>
+    // set to lowercase for search by genre code in BookAPI (ln 98 - ln 119)
+<span class="nc" id="L75">    val bookGenre = readNextLine(&quot;Enter book genre: &quot;).lowercase()</span>
+<span class="nc" id="L76">    val bookReleaseYear = readNextInt(&quot;Enter book release year: &quot;)</span>
+<span class="nc" id="L77">    val bookLength = readNextInt(&quot;Enter book length: &quot;)</span>
+<span class="nc" id="L78">    val bookPrice = readNextDouble(&quot;Enter book price (in Euro): &quot;)</span>
+    // if you write anything but true, it will default to false.
+    // I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
+    // as it would end the programme if true/false wasn't entered.
+<span class="nc" id="L82">    val bookRecommendation = readNextLine(&quot;Do you recommend the book? (true/false): &quot;).toBoolean()</span>
+
+    // BOOK GENRE VALIDATION
+<span class="nc" id="L85">    val bookGenreValidation = isValidCategory(bookGenre)</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">    if (bookGenreValidation) {</span>
+<span class="nc" id="L87">        bookAPI.add(Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))</span>
+<span class="nc" id="L88">        println(&quot;Added successfully&quot;)</span>
+    } else {
+<span class="nc" id="L90">        println(&quot;Add Failed&quot;)</span>
+    }
+<span class="nc" id="L92">}</span>
+
+fun listBooks() {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">    if (bookAPI.numberOfBooks() &gt; 0) {</span>
+<span class="nc" id="L96">        val option = readNextInt(</span>
+            &quot;&quot;&quot;
+                  &gt; --------------------------------
+                  &gt; |   1) View ALL books          |
+                  &gt; |   2) View fiction books      |
+                  &gt; |   3) View sci-fi books       |
+                  &gt; |   4) View nonfiction books   |
+                  &gt; |   5) View educational books  |
+                  &gt; |   6) View children books     |
+                  &gt; |   7) View drama books        |
+                  &gt; |   8) View media books        |
+                  &gt; --------------------------------
+<span class="nc" id="L108">         &gt; ==&gt;&gt; &quot;&quot;&quot;.trimMargin(&quot;&gt;&quot;)</span>
+        )
+
+<span class="nc bnc" id="L111" title="All 9 branches missed.">        when (option) {</span>
+<span class="nc" id="L112">            1 -&gt; listAllBooks()</span>
+<span class="nc" id="L113">            2 -&gt; listFictionBooks()</span>
+<span class="nc" id="L114">            3 -&gt; listScifiBooks()</span>
+<span class="nc" id="L115">            4 -&gt; listNonfictionBooks()</span>
+<span class="nc" id="L116">            5 -&gt; listEducationalBooks()</span>
+<span class="nc" id="L117">            6 -&gt; listChildrenBooks()</span>
+<span class="nc" id="L118">            7 -&gt; listDramaBooks()</span>
+<span class="nc" id="L119">            8 -&gt; listMediaBooks()</span>
+<span class="nc" id="L120">            else -&gt; println(&quot;Invalid option entered: &quot; + option)</span>
+        }
+    } else {
+<span class="nc" id="L123">        println(&quot;Option Invalid - No notes stored&quot;)</span>
+    }
+<span class="nc" id="L125">}</span>
+
+fun searchByBookTitle() {
+<span class="nc" id="L128">    val search = readNextLine(&quot;Enter title of note you want to find: &quot;)</span>
+<span class="nc" id="L129">    val results = bookAPI.listBooksByTitle(search)</span>
+<span class="nc bnc" id="L130" title="All 4 branches missed.">    if (results.isEmpty()) {</span>
+<span class="nc" id="L131">        println(&quot;no books with matching title&quot;)</span>
+    } else {
+<span class="nc" id="L133">        println(results)</span>
+    }
+<span class="nc" id="L135">}</span>
+
+// LISTING BOOK GENRE/RECOMMENDATION
+
+fun listAllBooks() {
+<span class="nc" id="L140">    println(&quot;There are &quot; + bookAPI.listAllBooks() + &quot; total books.&quot;)</span>
+<span class="nc" id="L141">}</span>
+
+fun listFictionBooks() {
+<span class="nc" id="L144">    println(&quot;There are &quot; + bookAPI.numberOfFictionBooks() + &quot; fiction books.&quot;)</span>
+<span class="nc" id="L145">    println(bookAPI.listBooksByGenre(&quot;fiction&quot;))</span>
+<span class="nc" id="L146">}</span>
+
+fun listScifiBooks() {
+<span class="nc" id="L149">    println(&quot;There are &quot; + bookAPI.numberOfScifiBooks() + &quot; Science-fiction books.&quot;)</span>
+<span class="nc" id="L150">    println(bookAPI.listBooksByGenre(&quot;sci-fi&quot;))</span>
+<span class="nc" id="L151">}</span>
+
+fun listNonfictionBooks() {
+<span class="nc" id="L154">    println(&quot;There are &quot; + bookAPI.numberOfNonfictionBooks() + &quot;Non fiction books.&quot;)</span>
+<span class="nc" id="L155">    println(bookAPI.listBooksByGenre(&quot;non fiction&quot;))</span>
+<span class="nc" id="L156">}</span>
+
+fun listEducationalBooks() {
+<span class="nc" id="L159">    println(&quot;There are &quot; + bookAPI.numberOfEducationBooks() + &quot;Educational books.&quot;)</span>
+<span class="nc" id="L160">    println(bookAPI.listBooksByGenre(&quot;education&quot;))</span>
+<span class="nc" id="L161">}</span>
+
+fun listChildrenBooks() {
+<span class="nc" id="L164">    println(&quot;There are &quot; + bookAPI.numberOfChildrenBooks() + &quot;Children books.&quot;)</span>
+<span class="nc" id="L165">    println(bookAPI.listBooksByGenre(&quot;children&quot;))</span>
+<span class="nc" id="L166">}</span>
+
+fun listDramaBooks() {
+<span class="nc" id="L169">    println(&quot;There are &quot; + bookAPI.numberOfDramaBooks() + &quot; Drama books.&quot;)</span>
+<span class="nc" id="L170">    println(bookAPI.listBooksByGenre(&quot;drama&quot;))</span>
+<span class="nc" id="L171">}</span>
+
+fun listMediaBooks() {
+<span class="nc" id="L174">    println(&quot;There are &quot; + bookAPI.numberOfMediaBooks() + &quot; Media books.&quot;)</span>
+<span class="nc" id="L175">    println(bookAPI.listBooksByGenre(&quot;media&quot;))</span>
+<span class="nc" id="L176">}</span>
+
+fun listRecommendedBooks() {
+<span class="nc" id="L179">    println(bookAPI.listRecommendedBooks())</span>
+<span class="nc" id="L180">}</span>
+
+fun listNotRecommendedBooks() {
+<span class="nc" id="L183">    println(bookAPI.listNotRecommendedBooks())</span>
+<span class="nc" id="L184">}</span>
+
+fun listByHighestPrice() {
+<span class="nc" id="L187">    println(bookAPI.listByHighestPrice())</span>
+<span class="nc" id="L188">}</span>
+
+fun listByLowestPrice() {
+<span class="nc" id="L191">    println(bookAPI.listByLowestPrice())</span>
+<span class="nc" id="L192">}</span>
+
+fun updateBook() {
+<span class="nc" id="L195">    listBooks()</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">    if (bookAPI.numberOfBooks() &gt; 0) {</span>
+<span class="nc" id="L197">        val indexToUpdate = readNextInt(&quot;Enter the index of the note to update: &quot;)</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        if (bookAPI.isValidIndex(indexToUpdate)) {</span>
+<span class="nc" id="L199">            val bookTitle = readNextLine(&quot;Enter a title for the book: &quot;)</span>
+<span class="nc" id="L200">            val bookAuthor = readNextLine(&quot;Enter the author for the book: &quot;)</span>
+<span class="nc" id="L201">            val bookGenre = readNextLine(&quot;Enter the main genre of the book: &quot;).lowercase()</span>
+<span class="nc" id="L202">            val bookReleaseYear = readNextInt(&quot;Enter the release year of the book: &quot;)</span>
+<span class="nc" id="L203">            val bookLength = readNextInt(&quot;Enter how many pages are in the book: &quot;)</span>
+<span class="nc" id="L204">            val bookPrice = readNextDouble(&quot;Enter how much the book cost (in euro): &quot;)</span>
+            // if you write anything but true, it will default to false.
+            // I had a readNextBoolean util imported from scannerInput, but I decided to delete as of now
+            // as it would end the programme if true/false wasn't entered.
+<span class="nc" id="L208">            val bookRecommendation = readNextLine(&quot;Do you recommend the book? (true/false): &quot;).toBoolean()</span>
+
+<span class="nc" id="L210">            val bookGenreValidation = isValidCategory(bookGenre)</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">            if (bookGenreValidation) {</span>
+<span class="nc" id="L212">                bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookAuthor, bookGenre, bookReleaseYear, bookLength, bookPrice, bookRecommendation))</span>
+<span class="nc" id="L213">                println(&quot;Update Successful&quot;)</span>
+            } else {
+<span class="nc" id="L215">                println(&quot;Update Failed&quot;)</span>
+            }
+        } else {
+<span class="nc" id="L218">            println(&quot;There are no notes for this index number&quot;)</span>
+        }
+    }
+<span class="nc" id="L221">}</span>
+
+fun deleteBook() {
+<span class="nc" id="L224">    listBooks()</span>
+    // checks to see if any books exist. if they don't then it won't ask to delete
+<span class="nc bnc" id="L226" title="All 2 branches missed.">    if (bookAPI.numberOfBooks() &gt; 0) {</span>
+<span class="nc" id="L227">        val indexToDelete = readNextInt(&quot;Enter the index of the book to delete: &quot;)</span>
+<span class="nc" id="L228">        val bookToDelete = bookAPI.deleteBook(indexToDelete)</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        if (bookToDelete != null) {</span>
+<span class="nc" id="L230">            println(&quot;Delete Successful! Deleted book: ${bookToDelete.BookTitle}&quot;)</span>
+        } else {
+<span class="nc" id="L232">            println(&quot;Delete NOT Successful&quot;)</span>
+        }
+    }
+<span class="nc" id="L235">}</span>
+
+// PERSISTENCE - XML
+
+fun XMLsave() {
+<span class="nc" id="L240">    try {</span>
+<span class="nc" id="L241">        bookAPI.store()</span>
+<span class="nc" id="L242">    } catch (e: Exception) {</span>
+<span class="nc" id="L243">        System.err.println(&quot;Error writing to file: $e&quot;)</span>
+    }
+<span class="nc" id="L245">}</span>
+
+fun XMLload() {
+<span class="nc" id="L248">    try {</span>
+<span class="nc" id="L249">        bookAPI.load()</span>
+<span class="nc" id="L250">    } catch (e: Exception) {</span>
+<span class="nc" id="L251">        System.err.println(&quot;Error reading from file: $e&quot;)</span>
+    }
+<span class="nc" id="L253">}</span>
+
+// PERSISTENCE - JSON
+
+fun JSONsave() {
+<span class="nc" id="L258">    try {</span>
+<span class="nc" id="L259">        bookAPIJSON.store()</span>
+<span class="nc" id="L260">    } catch (e: Exception) {</span>
+<span class="nc" id="L261">        System.err.println(&quot;Error writing to file: $e&quot;)</span>
+    }
+<span class="nc" id="L263">}</span>
+
+fun JSONload() {
+<span class="nc" id="L266">    try {</span>
+<span class="nc" id="L267">        bookAPIJSON.load()</span>
+<span class="nc" id="L268">    } catch (e: Exception) {</span>
+<span class="nc" id="L269">        System.err.println(&quot;Error reading from file: $e&quot;)</span>
+    }
+<span class="nc" id="L271">}</span>
+
+fun exitApp() {
+<span class="nc" id="L274">    println(&quot;Exiting...bye&quot;)</span>
+<span class="nc" id="L275">    exit(0)</span>
+<span class="nc" id="L276">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

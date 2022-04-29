@@ -1,0 +1,1 @@
+[90mC:\Users\domin\Desktop\wit ssd\book-rating-app\src\test\kotlin\controllers\[0mBookAPITest.kt[90m:[0m58[90m:10:[0m Missing newline before "}"

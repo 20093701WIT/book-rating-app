@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="controllers.BookAPITest$AddBooks" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-04-29T10:03:21" hostname="LAPTOP-VKTB1SKM" time="0.223">
+  <properties/>
+  <testcase name="adding a Book to a populated list adds to ArrayList()" classname="controllers.BookAPITest$AddBooks" time="0.223"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
