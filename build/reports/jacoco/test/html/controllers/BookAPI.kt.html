@@ -3,39 +3,39 @@
 import models.Book
 import persistence.Serializer
 
-<span class="nc" id="L6">private var books = ArrayList&lt;Book&gt;()</span>
+<span class="fc" id="L6">private var books = ArrayList&lt;Book&gt;()</span>
 
-<span class="nc" id="L8">class BookAPI(serializerType: Serializer) {</span>
-<span class="nc" id="L9">    private var serializer: Serializer = serializerType</span>
+<span class="fc" id="L8">class BookAPI(serializerType: Serializer) {</span>
+<span class="fc" id="L9">    private var serializer: Serializer = serializerType</span>
 
     fun add(book: Book): Boolean {
-<span class="nc" id="L12">        return books.add(book)</span>
+<span class="fc" id="L12">        return books.add(book)</span>
     }
 
     fun listAllBooks(): String =
-<span class="nc bnc" id="L16" title="All 2 branches missed.">        if (books.isEmpty())</span>
-<span class="nc" id="L17">            &quot;No books stored&quot;</span>
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        if (books.isEmpty())</span>
+<span class="fc" id="L17">            &quot;No books stored&quot;</span>
         else
-<span class="nc" id="L19">            formatListString(books)</span>
+<span class="fc" id="L19">            formatListString(books)</span>
 
     fun numberOfBooks(): Int {
-<span class="nc" id="L22">        return books.size</span>
+<span class="fc" id="L22">        return books.size</span>
     }
 
     fun findBook(index: Int): Book? {
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        return if (isValidListIndex(index, books)) {</span>
-<span class="nc" id="L27">            books[index]</span>
-<span class="nc" id="L28">        } else null</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        return if (isValidListIndex(index, books)) {</span>
+<span class="fc" id="L27">            books[index]</span>
+<span class="fc" id="L28">        } else null</span>
     }
 
     // utility method to determine if an index is valid in a list.
     fun isValidListIndex(index: Int, list: List&lt;Any&gt;): Boolean {
-<span class="nc bnc" id="L33" title="All 4 branches missed.">        return (index &gt;= 0 &amp;&amp; index &lt; list.size)</span>
+<span class="fc bfc" id="L33" title="All 4 branches covered.">        return (index &gt;= 0 &amp;&amp; index &lt; list.size)</span>
     }
 
     fun formatListString(notesToFormat: List&lt;Book&gt;): String =
-<span class="nc" id="L37">        notesToFormat</span>
-<span class="nc" id="L38">            .joinToString { book -&gt; books.indexOf(book).toString() + &quot;: &quot; + book.toString() + &quot;\n&quot; }</span>
+<span class="fc" id="L37">        notesToFormat</span>
+<span class="fc" id="L38">            .joinToString { book -&gt; books.indexOf(book).toString() + &quot;: &quot; + book.toString() + &quot;\n&quot; }</span>
 
 <span class="nc bnc" id="L40" title="All 4 branches missed.">    fun numberOfRecommendedBooks(): Int = books.count { book: Book -&gt; book.BookIsRecommended }</span>
 <span class="nc bnc" id="L41" title="All 4 branches missed.">    fun numberOfNotRecommendedBooks(): Int = books.count { book: Book -&gt; book.BookIsRecommended }</span>
@@ -57,24 +57,24 @@ import persistence.Serializer
 <span class="nc" id="L57">            .joinToString { book -&gt; books.indexOf(book).toString() + &quot;: &quot; + book.toString() + &quot;\n&quot; }</span>
 
     fun deleteBook(indexToDelete: Int): Book? {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        return if (isValidListIndex(indexToDelete, books)) {</span>
-<span class="nc" id="L61">            books.removeAt(indexToDelete)</span>
-<span class="nc" id="L62">        } else null</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        return if (isValidListIndex(indexToDelete, books)) {</span>
+<span class="fc" id="L61">            books.removeAt(indexToDelete)</span>
+<span class="fc" id="L62">        } else null</span>
     }
 
     fun updateBook(indexToUpdate: Int, book: Book?): Boolean {
-<span class="nc" id="L66">        val foundBook = findBook(indexToUpdate)</span>
-<span class="nc bnc" id="L67" title="All 4 branches missed.">        if ((foundBook != null) &amp;&amp; (book != null)) {</span>
-<span class="nc" id="L68">            foundBook.BookTitle = book.BookTitle</span>
-<span class="nc" id="L69">            foundBook.BookAuthor = book.BookAuthor</span>
-<span class="nc" id="L70">            foundBook.BookGenre = book.BookGenre</span>
-<span class="nc" id="L71">            foundBook.BookReleaseYear = book.BookReleaseYear</span>
-<span class="nc" id="L72">            foundBook.BookLength = book.BookLength</span>
-<span class="nc" id="L73">            foundBook.BookPrice = book.BookPrice</span>
-<span class="nc" id="L74">            foundBook.BookIsRecommended = book.BookIsRecommended</span>
-<span class="nc" id="L75">            return true</span>
+<span class="fc" id="L66">        val foundBook = findBook(indexToUpdate)</span>
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">        if ((foundBook != null) &amp;&amp; (book != null)) {</span>
+<span class="fc" id="L68">            foundBook.BookTitle = book.BookTitle</span>
+<span class="fc" id="L69">            foundBook.BookAuthor = book.BookAuthor</span>
+<span class="fc" id="L70">            foundBook.BookGenre = book.BookGenre</span>
+<span class="fc" id="L71">            foundBook.BookReleaseYear = book.BookReleaseYear</span>
+<span class="fc" id="L72">            foundBook.BookLength = book.BookLength</span>
+<span class="fc" id="L73">            foundBook.BookPrice = book.BookPrice</span>
+<span class="fc" id="L74">            foundBook.BookIsRecommended = book.BookIsRecommended</span>
+<span class="fc" id="L75">            return true</span>
         }
-<span class="nc" id="L77">        return false</span>
+<span class="fc" id="L77">        return false</span>
     }
 
     fun isValidIndex(index: Int): Boolean {
@@ -84,13 +84,13 @@ import persistence.Serializer
     // XML
     @Throws(Exception::class)
     fun load() {
-<span class="nc" id="L87">        books = serializer.read() as ArrayList&lt;Book&gt;</span>
-<span class="nc" id="L88">    }</span>
+<span class="fc" id="L87">        books = serializer.read() as ArrayList&lt;Book&gt;</span>
+<span class="fc" id="L88">    }</span>
 
     @Throws(Exception::class)
     fun store() {
-<span class="nc" id="L92">        serializer.write(books)</span>
-<span class="nc" id="L93">    }</span>
+<span class="fc" id="L92">        serializer.write(books)</span>
+<span class="fc" id="L93">    }</span>
 
     // LIST AND COUNT BOOK GENRES
 
@@ -124,7 +124,7 @@ import persistence.Serializer
 <span class="nc" id="L124">            .joinToString { book -&gt; books.indexOf(book).toString() + &quot;: &quot; + book.toString() + &quot;\n&quot; }</span>
 
     fun clearArray() {
-<span class="nc" id="L127">        books.clear()</span>
-<span class="nc" id="L128">    }</span>
+<span class="fc" id="L127">        books.clear()</span>
+<span class="fc" id="L128">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

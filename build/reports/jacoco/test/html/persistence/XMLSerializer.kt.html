@@ -9,24 +9,24 @@ import java.io.FileWriter
 import java.lang.Exception
 import kotlin.Throws
 
-<span class="nc" id="L12">class XMLSerializer(private val file: File) : Serializer {</span>
+<span class="fc" id="L12">class XMLSerializer(private val file: File) : Serializer {</span>
 
     @Throws(Exception::class)
     override fun read(): Any {
-<span class="nc" id="L16">        val xStream = XStream(DomDriver())</span>
-<span class="nc" id="L17">        xStream.allowTypes(arrayOf(Book::class.java))</span>
-<span class="nc" id="L18">        val inputStream = xStream.createObjectInputStream(FileReader(file))</span>
-<span class="nc" id="L19">        val obj = inputStream.readObject() as Any</span>
-<span class="nc" id="L20">        inputStream.close()</span>
-<span class="nc" id="L21">        return obj</span>
+<span class="fc" id="L16">        val xStream = XStream(DomDriver())</span>
+<span class="fc" id="L17">        xStream.allowTypes(arrayOf(Book::class.java))</span>
+<span class="fc" id="L18">        val inputStream = xStream.createObjectInputStream(FileReader(file))</span>
+<span class="fc" id="L19">        val obj = inputStream.readObject() as Any</span>
+<span class="fc" id="L20">        inputStream.close()</span>
+<span class="fc" id="L21">        return obj</span>
     }
 
     @Throws(Exception::class)
     override fun write(obj: Any?) {
-<span class="nc" id="L26">        val xStream = XStream(DomDriver())</span>
-<span class="nc" id="L27">        val outputStream = xStream.createObjectOutputStream(FileWriter(file))</span>
-<span class="nc" id="L28">        outputStream.writeObject(obj)</span>
-<span class="nc" id="L29">        outputStream.close()</span>
-<span class="nc" id="L30">    }</span>
+<span class="fc" id="L26">        val xStream = XStream(DomDriver())</span>
+<span class="fc" id="L27">        val outputStream = xStream.createObjectOutputStream(FileWriter(file))</span>
+<span class="fc" id="L28">        outputStream.writeObject(obj)</span>
+<span class="fc" id="L29">        outputStream.close()</span>
+<span class="fc" id="L30">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

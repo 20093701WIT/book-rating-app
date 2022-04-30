@@ -13,7 +13,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-
 class BookAPITest {
 
     private var wonder: Book? = null
@@ -66,8 +65,6 @@ class BookAPITest {
         fun `adding a Book to an empty list adds to ArrayList`() {
             val newBook = Book("test", "author", "science", 2002, 173, 4.99, false)
             emptyBooks!!.clearArray()
-            //Manually flushing as objects would carry over from previous tests.
-
             assertEquals(0, emptyBooks!!.numberOfBooks())
             assertTrue(emptyBooks!!.add(newBook))
             assertEquals(1, emptyBooks!!.numberOfBooks())
@@ -142,7 +139,6 @@ class BookAPITest {
         @Test
         fun `listAllBooks returns Books when ArrayList has books stored`() {
             emptyBooks!!.clearArray()
-            //This is a hot-fix to the problem relating to me having to manually flush the array.
             populatedBooks!!.add(wonder!!)
             populatedBooks!!.add(noLongerHuman!!)
             populatedBooks!!.add(rollOfThunder!!)
@@ -176,7 +172,6 @@ class BookAPITest {
             assertEquals(0, storingBooks.numberOfBooks())
             assertEquals(0, loadedBooks.numberOfBooks())
             assertEquals(storingBooks.numberOfBooks(), loadedBooks.numberOfBooks())
-
         }
 
         @Test
@@ -250,5 +245,45 @@ class BookAPITest {
             loadedBooks.clearArray()
         }
     }
+        /*
+       @Nested
+       inner class SearchMethods {
 
+        @Test
+        fun `search books by title returns no books when no books with that title exist`() {
+            // Searching a populated collection for a title that doesn't exist.
+
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            val searchResults = populatedBooks!!.listBooksByTitle("no results expected")
+            assertTrue(searchResults.isEmpty())
+            populatedBooks!!.clearArray()
+            emptyBooks!!.clearArray()
+            // Searching an empty collection
+            assertEquals(0, emptyBooks!!.numberOfBooks())
+            assertTrue(emptyBooks!!.listBooksByTitle("").isEmpty())
+        }
+
+        @Test
+        fun `search books by title returns books when books with that title exist`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+
+            // Searching a populated collection for a full title that exists (case matches exactly)
+            var searchResults = populatedBooks!!.listBooksByTitle("Wonder")
+            assertTrue(searchResults.contains("Wonder"))
+            assertFalse(searchResults.contains("The Great Gatsby"))
+
+            // Searching a populated collection for a partial title that exists
+            searchResults = populatedBooks!!.listBooksByTitle("of")
+            assertTrue(searchResults.contains("Diary of a Wimpy Kid"))
+            //assertTrue(searchResults.contains("Roll of Thunder, Hear My Cry"))
+            assertFalse(searchResults.contains("Wonder"))
+
+            // Searching a populated collection for a partial title that exists (case doesn't match)
+            searchResults = populatedBooks!!.listBooksByTitle("oF").lowercase()
+            assertTrue(searchResults.contains("Diary of a Wimpy Kid"))
+            //assertTrue(searchResults.contains("Roll Of Thunder, Hear My Cry"))
+            assertFalse(searchResults.contains("Wonder"))
+            populatedBooks!!.clearArray()
+        }
+    } */
 }
