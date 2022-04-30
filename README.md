@@ -13,7 +13,7 @@ Features of this console app include
 * listByLowestPrice() -> lists all books in order from lowest price to highest
 * searchByBookTitle() -> search for book based on the title
 
-===
+---
 
 * XMLload() -> user can load the book collection inside the .XML file
 * XMLsave() -> user can save the book collection to the .XML file
