@@ -10,20 +10,20 @@ import java.io.FileWriter
 <span class="fc" id="L10">class JSONSerializer(private val file: File) : Serializer {</span>
     @Throws(Exception::class)
     override fun read(): Any {
-<span class="nc" id="L13">        val xStream = XStream(JettisonMappedXmlDriver())</span>
-<span class="nc" id="L14">        xStream.allowTypes(arrayOf(Book::class.java))</span>
-<span class="nc" id="L15">        val inputStream = xStream.createObjectInputStream(FileReader(file))</span>
-<span class="nc" id="L16">        val obj = inputStream.readObject() as Any</span>
-<span class="nc" id="L17">        inputStream.close()</span>
-<span class="nc" id="L18">        return obj</span>
+<span class="fc" id="L13">        val xStream = XStream(JettisonMappedXmlDriver())</span>
+<span class="fc" id="L14">        xStream.allowTypes(arrayOf(Book::class.java))</span>
+<span class="fc" id="L15">        val inputStream = xStream.createObjectInputStream(FileReader(file))</span>
+<span class="fc" id="L16">        val obj = inputStream.readObject() as Any</span>
+<span class="fc" id="L17">        inputStream.close()</span>
+<span class="fc" id="L18">        return obj</span>
     }
 
     @Throws(Exception::class)
     override fun write(obj: Any?) {
-<span class="nc" id="L23">        val xStream = XStream(JettisonMappedXmlDriver())</span>
-<span class="nc" id="L24">        val outputStream = xStream.createObjectOutputStream(FileWriter(file))</span>
-<span class="nc" id="L25">        outputStream.writeObject(obj)</span>
-<span class="nc" id="L26">        outputStream.close()</span>
-<span class="nc" id="L27">    }</span>
+<span class="fc" id="L23">        val xStream = XStream(JettisonMappedXmlDriver())</span>
+<span class="fc" id="L24">        val outputStream = xStream.createObjectOutputStream(FileWriter(file))</span>
+<span class="fc" id="L25">        outputStream.writeObject(obj)</span>
+<span class="fc" id="L26">        outputStream.close()</span>
+<span class="fc" id="L27">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

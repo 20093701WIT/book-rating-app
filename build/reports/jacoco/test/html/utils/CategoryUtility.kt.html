@@ -5,16 +5,16 @@ object CategoryUtility {
     // NOTE: JvmStatic annotation means that the categories variable is static (i.e. we can reference it through the class
     //      name; we don't have to create an object of CategoryUtility to use it.
     @JvmStatic
-<span class="nc" id="L8">    val categories = setOf(&quot;fiction&quot;, &quot;sci-fi&quot;, &quot;nonfiction&quot;, &quot;educational&quot;, &quot;children&quot;, &quot;drama&quot;, &quot;media&quot;)</span>
+<span class="fc" id="L8">    val categories = setOf(&quot;fiction&quot;, &quot;sci-fi&quot;, &quot;nonfiction&quot;, &quot;educational&quot;, &quot;children&quot;, &quot;drama&quot;, &quot;media&quot;)</span>
 
     @JvmStatic
     fun isValidCategory(categoryToCheck: String?): Boolean {
-<span class="nc bnc" id="L12" title="All 2 branches missed.">        for (category in categories) {</span>
-<span class="nc bnc" id="L13" title="All 2 branches missed.">            if (category.equals(categoryToCheck, ignoreCase = true)) {</span>
-<span class="nc" id="L14">                return true</span>
+<span class="fc bfc" id="L12" title="All 2 branches covered.">        for (category in categories) {</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">            if (category.equals(categoryToCheck, ignoreCase = true)) {</span>
+<span class="fc" id="L14">                return true</span>
             }
         }
-<span class="nc" id="L17">        return false</span>
+<span class="fc" id="L17">        return false</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -122,4 +122,8 @@ class BookAPI(serializerType: Serializer) {
     fun listBooksByTitle(s: String) =
         books.filter { book -> book.BookTitle.contains(s) }
             .joinToString { book -> books.indexOf(book).toString() + ": " + book.toString() + "\n" }
+
+    fun clearArray() {
+        books.clear()
+    }
 }
